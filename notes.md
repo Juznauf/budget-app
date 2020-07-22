@@ -179,5 +179,30 @@ async def read_user_item(
 
 ### MongoDB Atlas 
 
+MongoDB is a nosql database. It supports various forms of data. MongoDB stores data in JSON like documents, which makes the database very flexible and scalable.
+MongoDB is a document-oriented database model. Each MongoDB database contains collections and which in turn contains documents. Each document can be different and depends on the varying number of fields.  The model of each document will be different in size and content from each other. The data model features allow you to store arrays and complex structured in a hierarchical relationship.
+
+
 Getting started using this [tutorial](https://towardsdatascience.com/getting-started-with-mongodb-atlas-overview-and-tutorial-7a1d58222521) 
 
+Charactheristics of MongoDB, from [here](https://www.educba.com/mongodb-nosql/)
+* Schema-Less
+    * It has no schema so it can have many fields, content, and size different than another document in the same collection.
+* Indexing
+    * Indexing is very important for improving the performances of search queries. MongoDB uses indexing of dataset to enhance query performances and searches.  MongoDB indexing enhances the performance for the faster search query. Document in a MongoDB can be used for indexing using primary and secondary indices.
+* File storage
+    * Can be used as a file system with load balancing and data replication features over multiple machines for storing files.
+* Replication
+    * The feature of replication is to distribute data multiple nodes. It can have primary nodes and secondary nodes to replicate data. Replication of data is done using master-slave architecture. MongoDB provides a replication feature by distributing data across multiple machines.
+* Sharding 
+    * This process distributes data across multiple physical partitions called shards. Due to sharding MongoDB automatic process load balancing. We use sharding in cases where we need to work on very larger datasets.
+
+
+#### Using Mongodb with fastapi
+
+Tutorial [here](https://frankie567.github.io/fastapi-users/configuration/databases/mongodb/#next-steps)
+
+
+For the driver will use the [Pymongo](https://docs.mongodb.com/drivers/pymongo) driver instead of motor, as motor does not support windows.
+
+To connect to our mongodb cluster see [this](https://docs.atlas.mongodb.com/tutorial/connect-to-your-cluster/)
