@@ -169,8 +169,102 @@ async def read_user_item(
 ```
 
 
+**request body**
+
+When you need to send data from a client, to the API, you send it as a request body. A request body is sent by the client to your API. A response body is the data your API sends to the client. Your API almost always has to send a response body. But clients don't necessarily need to send request bodies all the time. To declare a request body, you use Pydantic models with all their power and benefits  
 
 
+Import the Basemodel from pydantic
+
+```python
+from typing import Optional
+
+from fastapi import FastAPI
+from pydantic import BaseModel
+
+
+class Item(BaseModel):
+    name: str
+    description: Optional[str] = None
+    price: float
+    tax: Optional[float] = None
+
+
+app = FastAPI()
+
+
+@app.post("/items/")
+async def create_item(item: Item):
+    return item
+```
+
+To add the item to the path operation, declare it the same way we declared path and query params
+
+
+We can also add additional validation for optional params with Query, as such
+
+```python
+from typing import Optional
+
+from fastapi import FastAPI, Query
+
+app = FastAPI()
+
+
+@app.get("/items/")
+async def read_items(q: Optional[str] = Query(None, max_length=50)):
+    results = {"items": [{"item_id": "Foo"}, {"item_id": "Bar"}]}
+    if q:
+        results.update({"q": q})
+    return results
+```
+
+we can also add regex to the Query params for additional validation 
+
+When we need to declare a value as required while using Query, you can use `...` (the python elipsis params) as the first argument as such 
+
+```python
+
+@app.get("/items/")
+async def read_items(q: str = Query(..., min_length=3)):
+    results = {"items": [{"item_id": "Foo"}, {"item_id": "Bar"}]}
+    if q:
+        results.update({"q": q})
+    return results
+```
+
+We can also declare it to recieve a list of values such as 
+
+```python
+from typing import List, Optional
+
+from fastapi import FastAPI, Query
+
+app = FastAPI()
+
+
+@app.get("/items/")
+async def read_items(q: Optional[List[str]] = Query(None)):
+    query_items = {"q": q}
+    return query_items
+```
+
+now using a get request we can have multiple q as our parameters
+The response to the above url is 
+```json
+{
+  "q": [
+    "foo",
+    "bar"
+  ]
+}
+```
+
+
+Difference between using `list` and `List[int]` is that the latter would check the contents of list as all being integers and the former would not.
+
+
+**Alot of fastAPI revolves around the fact that data validation should be done in the function header instead of the body of the function, such that we can send the response errors can be automated
 
 
 
@@ -206,3 +300,10 @@ Tutorial [here](https://frankie567.github.io/fastapi-users/configuration/databas
 For the driver will use the [Pymongo](https://docs.mongodb.com/drivers/pymongo) driver instead of motor, as motor does not support windows.
 
 To connect to our mongodb cluster see [this](https://docs.atlas.mongodb.com/tutorial/connect-to-your-cluster/)
+
+
+
+
+### The hierarchy of fastapi
+
+see [here](https://fastapi.tiangolo.com/benchmarks/)
