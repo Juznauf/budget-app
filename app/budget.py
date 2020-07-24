@@ -17,9 +17,9 @@ from pymongo import MongoClient
 from datetime import datetime
 
 client = MongoClient(
-   "mongodb+srv://nauf:<password>@cluster0.ngmxl.mongodb.net/plannerbee?retryWrites=true&w=majority")
+   "mongodb+srv://nauf:XdxCOlhec7iYftKE@cluster0.ngmxl.mongodb.net/plannerbee?retryWrites=true&w=majority")
 db = client['plannerbee'] # init db 
-print(db.list_collection_names())
+# print(db.list_collection_names())
 # for k in db.__dict__:
 #     print(k, ':', db.__dict__[k]) to see the attributes in db 
 users_collection = db['banks_users'] # for the collections of all transactions 
@@ -44,12 +44,17 @@ class User(BaseModel):
             raise ValueError(
                     "username not found, please provide a valid username"
                             )
-    
+
+print(users_collection.full_name) # check if connection is succesful
 
 
 
 
+class Budget(BaseModel):
+    """
+    Create budget model for the users 
+    """
 
-
+    pass
 
 
