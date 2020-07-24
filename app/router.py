@@ -16,19 +16,19 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import BaseModel
 
 import budget
+from budget import Budget
 # from budget import User # import for validation 
 
 router = APIRouter()
 
-
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
 
 def get_user(db, username: str):
     """
     returns our collections object
     """
     return db.find_one({"_id": username})
-
 
 def decode_token(token):
     """
@@ -41,8 +41,6 @@ def get_current_user(token:str = Depends(oauth2_scheme)):
     return user
 
 
-
-
 @router.post("/token")
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     username = form_data.username
@@ -53,7 +51,44 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 
 @router.get("/users/me")
 async def read_users_me(current_user: budget.User = Depends(get_current_user)):
+    """
+    will show the users transactions located in the "banks_users" 
+    collection 
+    """
     return current_user
+
+# @router.post("/users/me/create_budgets", response_model=Budget)
+@router.post("/users/me/create_budgets")
+async def users_create_budget(
+                            pb_identifier=Form(...),
+                            category=Form(...),
+                            amount=Form(...),
+                            budget_type=Form(...),
+                            current_user: budget.User = Depends(get_current_user), 
+                            ):
+    """
+    form for creating a new budget
+    """
+    new_budget = Budget(
+        pb_identifier=pb_identifier,
+        category=category,
+        amount=amount,
+        budget_type=budget_type)
+    return {"success": new_budget}
+
+
+@router.get("/users/me/budgets")
+async def read_budgets(
+                    pb_identifier=Form(...),
+                    category=Form(...),
+                    amount=Form(...),
+                    budget_type=Form(...),
+                    current_user: budget.User = Depends(get_current_user), 
+                    ):
+    """
+    shows all the valid budgets
+    """
+    pass
 
 
 

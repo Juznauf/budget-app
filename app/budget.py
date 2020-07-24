@@ -4,17 +4,11 @@ will include all the logic for creating the budgets
 will have the path functions import from this file
 """
 
-# logic here to create the budget document which will be written into the plannerbee database, under the "budgets_users" collection of the M0 cluster mongodb database.
-
-
-
-# the request from the user is as such, a pb_identifier,category,amount, budget_type, the response to the client is as follows, we need to return if the budget has been successfully created or not in our database cluster. So we need to respond with a custom error message in JSON format. So the budget module has to take care of the writes to our DB as well as the response to the client. 
-
-# so in this module we shall initialize the database as well as perform CRUD on our db.
+from typing import Optional
 
 from pydantic import BaseModel, ValidationError, validator
 from pymongo import MongoClient
-from datetime import datetime
+from datetime import datetime, timedelta
 
 client = MongoClient(
    "mongodb+srv://nauf:XdxCOlhec7iYftKE@cluster0.ngmxl.mongodb.net/plannerbee?retryWrites=true&w=majority")
@@ -45,16 +39,73 @@ class User(BaseModel):
                     "username not found, please provide a valid username"
                             )
 
-print(users_collection.full_name) # check if connection is succesful
-
-
-
 
 class Budget(BaseModel):
     """
     Create budget model for the users 
     """
+    pb_identifier: str
+    category: str
+    amount: float
+    budget_type: str
 
-    pass
+
+    @validator('category')
+    def valid_category(cls, v):
+        """
+        check that category is one of 
+        ["transfers", "shopping", "education", "personal_care"]
+        """
+        if v not in ["transfers", "shopping", "education", "personal_care"]:
+            raise ValueError(
+                "Not a valid category ! These are the list of valid categories"\
+                    ":[transfers, shopping, education, personal_care]"
+                            )
+    
+    @validator('budget_type')
+    def valid_budget_type(cls, v):
+        """
+        check that it is either "Monthly" or "Annual"
+        """
+
+        if v.lower().title() not in ["Monthly", "Annual"]:
+            raise ValueError(
+                            "Not a valid budget type, budget type is"\
+                            "either Monthly or Annual"
+                            )
+
+    def create_budget(
+                    self, users_collection = users_collection,
+                    budget_collection = budget_collection
+                    ):
+        """
+        create budget according to user defined params,
+        if creation successful, return the budget object, 
+        else return none
+        """
+        _id = self.pb_identifier
+        created_at = datetime.now().strftime(format="%Y-%m-%dT%H:%M:%SZ")
+        budget = {"_id":_id,
+                "budgets":{"created_at":created_at}}
+        budget_collection.insert_one(budget)
+        
 
 
+
+
+
+
+if users_collection and budget_collection: # check if connection is succesful
+    print(f"Successfully connected to collections {users_collection}\
+     and {budget_collection}")
+
+
+
+if __name__ == "__main__":
+    budget1 = Budget(**{'pb_identifier': "16cecd11-2f83-4864-bf6b-f270f4be88cb",
+    'category': "shopping",
+    'amount': 100,
+    'budget_type': "Annual"})
+    # for i in range(2):
+    #     budget1.create_budget()
+        
