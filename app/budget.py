@@ -17,7 +17,6 @@ import secrets
 client = MongoClient(
    "mongodb+srv://new_user_1:e7VwW5qSO3Gz9YVe@cluster0.ngmxl.mongodb.net/plannerbee?retryWrites=true&w=majority")
 db = client.plannerbee # init db 
-# db = 'test' # init db 
 
 class User(BaseModel):
     """

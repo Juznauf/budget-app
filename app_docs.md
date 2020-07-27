@@ -2,10 +2,10 @@
 
 ## Instructions on running the api
 
-1. While in the `app` directory. Run the following command in shell `uvicorn main:app --reload`
+1. While in the `app` directory. Run the following command in CLI `uvicorn main:app --reload`
 2. Go to the relative path `root\docs`
 3. Click on `authorize`, enter the following user `16cecd11-2f83-4864-bf6b-f270f4be88cb` in the username and for the password put in any character
-4. Once authorized, the user can then utilise the api under the current user id
+4. Once authorized, the user can then utilize the api under the current user id
 
 ## Feature list
 
