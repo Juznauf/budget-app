@@ -8,7 +8,6 @@ all the api calls to the user will be done in the router module
 from typing import List, Optional # for type hints
 import router
 from fastapi import FastAPI, Query, status # status for post request hints
-# from pydantic import Basemodel 
 
 app = FastAPI()
 
@@ -17,21 +16,4 @@ app.include_router(router.router)
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
-
-
-
-
-# @app.get("/blog")
-# async def blog():
-#     return {"thisblog": "Hello blog"}
-
-
-# @app.get("/items/{item_id}")
-# async def read_item(item_id):
-#     """
-#     the {item_id} will be completed in the get request
-#     """
-#     return {"item_id": item_id}
-
-
+    return {"message": "Hello User, Please go to root/docs"}

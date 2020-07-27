@@ -302,8 +302,44 @@ For the driver will use the [Pymongo](https://docs.mongodb.com/drivers/pymongo) 
 To connect to our mongodb cluster see [this](https://docs.atlas.mongodb.com/tutorial/connect-to-your-cluster/)
 
 
+### Pymongo 
+
+
+#### Understanding JSON
+
+
+
+
+JSON
+* JSON arrays are defined by the square brackets
+* JSON can have any level of hiearachy 
+
+MONGO DB query language
+* Creating documents are inserts (insertone, insertmany, etc)
+* To insert many into the collection, we use an array of items
+* To update documents, use updateone to only update one document
+
+For eg. 
+
+```json
+db.movieDetails.updateOne({
+    title: "The Martian" 
+}, {
+    "$set": {
+        poster: "some characther"
+    }
+})
+```
+
+we need to specify a filter first, for filterOne, only the first document that appears gets updated. There are many operators used to update the document, `$set` will update the specified field if there is one in the document 
+
+For queries on nested documents see [here](https://docs.mongodb.com/manual/tutorial/query-embedded-documents/)
+
+
+To access and update nested documents see [here](https://docs.mongodb.com/manual/reference/operator/update/set/) (**important concept here**)
 
 
 ### The hierarchy of fastapi
 
 see [here](https://fastapi.tiangolo.com/benchmarks/)
+
